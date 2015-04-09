@@ -39,12 +39,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\VPN.Entities\VPN.Core.Entities.csproj">
       <Project>{6ca1a08b-d5a7-4233-9b11-d051d95e23a0}</Project>
       <Name>VPN.Core.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Repositories\VPN.Core.IRepositories\VPN.Core.IRepositories.csproj">
+      <Project>{ccb6477c-f7fe-438f-b29a-1f9b713e520e}</Project>
+      <Name>VPN.Core.IRepositories</Name>
     </ProjectReference>
     <ProjectReference Include="..\VPN.Core.IServices\VPN.Core.IServices.csproj">
       <Project>{32b02295-4b94-478c-89b7-f1a3be44b84d}</Project>
