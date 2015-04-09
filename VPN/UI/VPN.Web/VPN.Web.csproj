@@ -160,11 +160,13 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\VpnController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\VPNWebContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -218,6 +220,12 @@
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\VPN\Create.cshtml" />
+    <Content Include="Views\VPN\Delete.cshtml" />
+    <Content Include="Views\VPN\Details.cshtml" />
+    <Content Include="Views\VPN\Edit.cshtml" />
+    <Content Include="Views\VPN\Index.cshtml" />
+    <Content Include="Views\VPN\Buy.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -226,6 +234,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\VPN.Entities\VPN.Core.Entities.csproj">
+      <Project>{6ca1a08b-d5a7-4233-9b11-d051d95e23a0}</Project>
+      <Name>VPN.Core.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

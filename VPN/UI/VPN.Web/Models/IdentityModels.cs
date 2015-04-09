@@ -13,5 +13,6 @@ namespace VPN.Web.Models
             : base("DefaultConnection")
         {
         }
+        public System.Data.Entity.DbSet<VPN.Core.Entities.VpnInfo> VpnInfoes { get; set; }
     }
 }
