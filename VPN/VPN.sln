@@ -3,8 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VPN.Web", "UI\VPN.Web\VPN.Web.csproj", "{985A6DD0-9557-4B8C-8FB0-12E0F89D5CAB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{49666BD2-865E-4DD5-9956-77BC0BB945B9}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{985A6DD0-9557-4B8C-8FB0-12E0F89D5CAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{985A6DD0-9557-4B8C-8FB0-12E0F89D5CAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{985A6DD0-9557-4B8C-8FB0-12E0F89D5CAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{985A6DD0-9557-4B8C-8FB0-12E0F89D5CAB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{985A6DD0-9557-4B8C-8FB0-12E0F89D5CAB} = {49666BD2-865E-4DD5-9956-77BC0BB945B9}
 	EndGlobalSection
 EndGlobal
