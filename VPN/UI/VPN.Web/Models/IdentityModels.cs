@@ -10,7 +10,7 @@ namespace VPN.Web.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection")
+            : base("DefaultConnection2")
         {
         }
         public System.Data.Entity.DbSet<VPN.Core.Entities.VpnInfo> VpnInfoes { get; set; }

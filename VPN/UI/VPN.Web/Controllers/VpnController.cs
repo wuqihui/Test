@@ -1,40 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
+﻿using System.Net;
 using System.Threading.Tasks;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using VPN.Core.Entities;
-using VPN.Web.Models;
+using VPN.Core.IServices;
+using VPN.Setting;
 
 namespace VPN.Web.Controllers
 {
     public class VpnController : Controller
     {
-        private VPNWebContext db = new VPNWebContext();
+        private IVpnService vpnService = Ioc.Resolve<IVpnService>();
 
         // GET: /Vpn/
-        public async Task<ActionResult> Index()
+        public  ActionResult  Index()
         {
-            return View(await db.VpnInfoes.ToListAsync());
+             return View(vpnService.FindList(x=>x.IsDeleted==false,"Speed",false) );
         }
 
         // GET: /Vpn/Details/5
         public async Task<ActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            VpnInfo vpninfo = await db.VpnInfoes.FindAsync(id);
-            if (vpninfo == null)
-            {
-                return HttpNotFound();
-            }
-            return View(vpninfo);
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            //VpnInfo vpninfo = await db.VpnInfoes.FindAsync(id);
+            //if (vpninfo == null)
+            //{
+            //    return HttpNotFound();
+            //}
+            //return View(vpninfo);
+            return null;
         }
 
         // GET: /Vpn/Create
@@ -48,31 +44,32 @@ namespace VPN.Web.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include="Id,Speed,IpAddress")] VpnInfo vpninfo)
+        public  ActionResult  Create([Bind(Include="Id,Speed,IpAddress")] VpnInfo vpninfo)
         {
             if (ModelState.IsValid)
             {
-                db.VpnInfoes.Add(vpninfo);
-                await db.SaveChangesAsync();
+                vpnService.Insert(vpninfo);
                 return RedirectToAction("Index");
             }
 
-            return View(vpninfo);
+            //return View(vpninfo);
+            return null;
         }
 
         // GET: /Vpn/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            VpnInfo vpninfo = await db.VpnInfoes.FindAsync(id);
-            if (vpninfo == null)
-            {
-                return HttpNotFound();
-            }
-            return View(vpninfo);
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            //VpnInfo vpninfo = await db.VpnInfoes.FindAsync(id);
+            //if (vpninfo == null)
+            //{
+            //    return HttpNotFound();
+            //}
+            //return View(vpninfo);
+            return null;
         }
 
         // POST: /Vpn/Edit/5
@@ -82,28 +79,30 @@ namespace VPN.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include="Id,Speed,IpAddress")] VpnInfo vpninfo)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(vpninfo).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            return View(vpninfo);
+            //if (ModelState.IsValid)
+            //{
+            //    db.Entry(vpninfo).State = EntityState.Modified;
+            //    await db.SaveChangesAsync();
+            //    return RedirectToAction("Index");
+            //}
+            //return View(vpninfo);
+            return null;
         }
 
         // GET: /Vpn/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            VpnInfo vpninfo = await db.VpnInfoes.FindAsync(id);
-            if (vpninfo == null)
-            {
-                return HttpNotFound();
-            }
-            return View(vpninfo);
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            //VpnInfo vpninfo = await db.VpnInfoes.FindAsync(id);
+            //if (vpninfo == null)
+            //{
+            //    return HttpNotFound();
+            //}
+            //return View(vpninfo);
+            return null;
         }
 
         // POST: /Vpn/Delete/5
@@ -111,43 +110,41 @@ namespace VPN.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            VpnInfo vpninfo = await db.VpnInfoes.FindAsync(id);
-            db.VpnInfoes.Remove(vpninfo);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            //VpnInfo vpninfo = await db.VpnInfoes.FindAsync(id);
+            //db.VpnInfoes.Remove(vpninfo);
+            //await db.SaveChangesAsync();
+            //return RedirectToAction("Index");
+            return null;
         }
         // GET: /Vpn/Buy/5
-        public async Task<ActionResult> Buy(int? id)
+        public ActionResult Buy(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VpnInfo vpninfo = await db.VpnInfoes.FindAsync(id);
+            VpnInfo vpninfo =vpnService.Find(x=>x.Id==id);
             if (vpninfo == null)
             {
                 return HttpNotFound();
             }
             return View(vpninfo); 
+            return null;
         }
         // POST: /Vpn/Buy/5
         [HttpPost, ActionName("Buy")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> BuyConfirmed(int id)
+        public ActionResult BuyConfirmed(int id)
         {
-            VpnInfo vpninfo = await db.VpnInfoes.FindAsync(id);
-            //db.VpnInfoes.Remove(vpninfo);
-            //await db.SaveChangesAsync();
+            
+            var servervpn = Ioc.Resolve<IUserService>();
+            Order order=new Order();
+            order.Vpn = vpnService.Find(x => x.Id == id);
+            order.User =servervpn.Find(x => x.Id==id);
+            servervpn.SaveOrders(order);
+
             return RedirectToAction("Index","Home");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }

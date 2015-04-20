@@ -1,10 +1,10 @@
-﻿namespace VPN.Core.Entities
-{
-    public class VpnInfo
-    {
-        public int Id { get; set; }
-        public int Speed { get; set; }
-        public string IpAddress { get; set; }
+﻿using System;
 
+namespace VPN.Core.Entities
+{
+    public class VpnInfo:EntityBase<int>
+    {
+        public virtual int Speed { get; set; }
+        public virtual string IpAddress { get; set; }
     }
 }

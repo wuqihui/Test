@@ -4,15 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A47CC620-4E12-4E37-8679-9A93D5F9340C}</ProjectGuid>
+    <ProjectGuid>{32BA3186-1740-4014-BD61-7DA57133C307}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VPN.Core.Repositories</RootNamespace>
-    <AssemblyName>VPN.Core.Repositories</AssemblyName>
+    <RootNamespace>VPN.Setting</RootNamespace>
+    <AssemblyName>VPN.Setting</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,48 +30,52 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Iesi.Collections">
-      <HintPath>..\..\RefDll\Iesi.Collections.dll</HintPath>
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="IO.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Business\VPN.Core.IServices\VPN.Core.IServices.csproj">
+      <Project>{32b02295-4b94-478c-89b7-f1a3be44b84d}</Project>
+      <Name>VPN.Core.IServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Business\VPN.Core.Services\VPN.Core.Services.csproj">
+      <Project>{068fd271-4add-42db-acac-587a221123bb}</Project>
+      <Name>VPN.Core.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\VPN.Core.Mapping\VPN.Core.Mapping.csproj">
+      <Project>{dae86e20-86aa-47b9-9259-da72bb5f2152}</Project>
+      <Name>VPN.Core.Mapping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\VPN.Entities\VPN.Core.Entities.csproj">
+      <Project>{6ca1a08b-d5a7-4233-9b11-d051d95e23a0}</Project>
+      <Name>VPN.Core.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Repositories\VPN.Core.IRepositories\VPN.Core.IRepositories.csproj">
+      <Project>{ccb6477c-f7fe-438f-b29a-1f9b713e520e}</Project>
+      <Name>VPN.Core.IRepositories</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Repositories\VPN.Core.Repositories\VPN.Core.Repositories.csproj">
+      <Project>{a47cc620-4e12-4e37-8679-9a93d5f9340c}</Project>
+      <Name>VPN.Core.Repositories</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\RefDll\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor">
+      <HintPath>..\..\RefDll\Castle.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentNHibernate">
+      <HintPath>..\..\RefDll\FluentNHibernate.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\..\RefDll\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="RepositoryBase.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserRepository.cs" />
-    <Compile Include="VpnRepository.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Core\VPN.Entities\VPN.Core.Entities.csproj">
-      <Project>{6ca1a08b-d5a7-4233-9b11-d051d95e23a0}</Project>
-      <Name>VPN.Core.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\VPN.Core.IRepositories\VPN.Core.IRepositories.csproj">
-      <Project>{ccb6477c-f7fe-438f-b29a-1f9b713e520e}</Project>
-      <Name>VPN.Core.IRepositories</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。启用“NuGet 程序包还原”可下载这些程序包。有关详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

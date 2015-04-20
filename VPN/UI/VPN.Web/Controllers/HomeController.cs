@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using VPN.Web.Models;
+﻿using System.Web.Mvc;
+using VPN.Core.IServices;
+using VPN.Setting;
 
 namespace VPN.Web.Controllers
 {
     [AllowAnonymous]
     public class HomeController : Controller
     {
-        private VPNWebContext db = new VPNWebContext();
+        private IVpnService vpnService = Ioc.Resolve<IVpnService>();
 
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            return View(await db.VpnInfoes.ToListAsync());
-             
+
+           // return View();
+             return View(vpnService.FindList(x => x.Id != 0, "", false));
+
         }
 
         public ActionResult About()

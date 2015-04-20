@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using VPN.Core.Entities;
+using VPN.Core.IServices;
+using VPN.Setting;
 using VPN.Web.Models;
 
 namespace VPN.Web.Controllers
@@ -14,10 +16,16 @@ namespace VPN.Web.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        private IUserService userService;
+        private IAuthenticationManager AuthenticationManager { get { return HttpContext.GetOwinContext().Authentication; } }
         public AccountController()
-            : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
         {
+            userService = Ioc.Resolve<IUserService>();
         }
+
+        //    : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
+        //{
+        //}
 
         public AccountController(UserManager<ApplicationUser> userManager)
         {
@@ -40,21 +48,25 @@ namespace VPN.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public async Task<ActionResult> Login(LoginViewModel loginViewModel, string returnUrl)
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = await UserManager.FindAsync(model.UserName, model.Password);
+                // ApplicationUser user = await UserManager.FindAsync(model.UserName, model.Password);
+                var userService = Ioc.Resolve<IUserService>();
+                var user = userService.Find(x => x.UserName == loginViewModel.UserName && x.Password == loginViewModel.Password);
                 if (user != null)
                 {
-                    await SignInAsync(user, model.RememberMe);
+                    // await SignInAsync(user, model.RememberMe);
+
+                    SignInAsync(user, loginViewModel.RememberMe);
                     return RedirectToLocal(returnUrl);
                 }
                 ModelState.AddModelError("", "Invalid username or password.");
             }
 
             // 如果我们进行到这一步时某个地方出错，则重新显示表单
-            return View(model);
+            return View(loginViewModel);
         }
 
         //
@@ -70,18 +82,31 @@ namespace VPN.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public ActionResult Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser {UserName = model.UserName};
-                IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                // var user = new ApplicationUser {UserName = model.UserName};
+                //IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+                //if (result.Succeeded)
+                //{
+                //    await SignInAsync(user, false);
+                //    return RedirectToAction("Index", "Home");
+                //}
+                //AddErrors(result);
+
+                Core.Entities.User user = new User();
+                user.UserName = model.UserName;
+                user.Password = model.Password;
+                user.Sex = EntityEnums.Sex.Man;
+                user.CreateTime = DateTime.Now;
+                var IuserService = Ioc.Resolve<IUserService>();
+               var result= IuserService.Insert(user);
+                if (result > 0)
                 {
-                    await SignInAsync(user, false);
-                    return RedirectToAction("Index", "Home");
+                    SignInAsync(user, false);
                 }
-                AddErrors(result);
+                return RedirectToAction("Index", "Home");
             }
 
             // 如果我们进行到这一步时某个地方出错，则重新显示表单
@@ -107,7 +132,7 @@ namespace VPN.Web.Controllers
             {
                 message = ManageMessageId.Error;
             }
-            return RedirectToAction("Manage", new {Message = message});
+            return RedirectToAction("Manage", new { Message = message });
         }
 
         //
@@ -148,7 +173,7 @@ namespace VPN.Web.Controllers
                                 model.NewPassword);
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("Manage", new {Message = ManageMessageId.ChangePasswordSuccess});
+                        return RedirectToAction("Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
                     }
                     AddErrors(result);
                 }
@@ -168,7 +193,7 @@ namespace VPN.Web.Controllers
                         await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("Manage", new {Message = ManageMessageId.SetPasswordSuccess});
+                        return RedirectToAction("Manage", new { Message = ManageMessageId.SetPasswordSuccess });
                     }
                     AddErrors(result);
                 }
@@ -187,7 +212,7 @@ namespace VPN.Web.Controllers
         {
             // 请求重定向到外部登录提供程序
             return new ChallengeResult(provider,
-                Url.Action("ExternalLoginCallback", "Account", new {ReturnUrl = returnUrl}));
+                Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
         //
@@ -195,24 +220,25 @@ namespace VPN.Web.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
-            ExternalLoginInfo loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
-            if (loginInfo == null)
-            {
-                return RedirectToAction("Login");
-            }
+            //ExternalLoginInfo loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
+            //if (loginInfo == null)
+            //{
+            //    return RedirectToAction("Login");
+            //}
 
-            // Sign in the user with this external login provider if the user already has a login
-            ApplicationUser user = await UserManager.FindAsync(loginInfo.Login);
-            if (user != null)
-            {
-                await SignInAsync(user, false);
-                return RedirectToLocal(returnUrl);
-            }
-            // If the user does not have an account, then prompt the user to create an account
-            ViewBag.ReturnUrl = returnUrl;
-            ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-            return View("ExternalLoginConfirmation",
-                new ExternalLoginConfirmationViewModel {UserName = loginInfo.DefaultUserName});
+            //// Sign in the user with this external login provider if the user already has a login
+            //ApplicationUser user = await UserManager.FindAsync(loginInfo.Login);
+            //if (user != null)
+            //{
+            //    await SignInAsync(user, false);
+            //    return RedirectToLocal(returnUrl);
+            //}
+            //// If the user does not have an account, then prompt the user to create an account
+            //ViewBag.ReturnUrl = returnUrl;
+            //ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
+            //return View("ExternalLoginConfirmation",
+            //    new ExternalLoginConfirmationViewModel { UserName = loginInfo.DefaultUserName });
+            return null;
         }
 
         //
@@ -229,18 +255,18 @@ namespace VPN.Web.Controllers
         // GET: /Account/LinkLoginCallback
         public async Task<ActionResult> LinkLoginCallback()
         {
-            ExternalLoginInfo loginInfo =
-                await AuthenticationManager.GetExternalLoginInfoAsync(XsrfKey, User.Identity.GetUserId());
-            if (loginInfo == null)
-            {
-                return RedirectToAction("Manage", new {Message = ManageMessageId.Error});
-            }
-            IdentityResult result = await UserManager.AddLoginAsync(User.Identity.GetUserId(), loginInfo.Login);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Manage");
-            }
-            return RedirectToAction("Manage", new {Message = ManageMessageId.Error});
+            //ExternalLoginInfo loginInfo =
+            //    await AuthenticationManager.GetExternalLoginInfoAsync(XsrfKey, User.Identity.GetUserId());
+            //if (loginInfo == null)
+            //{
+            //    return RedirectToAction("Manage", new {Message = ManageMessageId.Error});
+            //}
+            //IdentityResult result = await UserManager.AddLoginAsync(User.Identity.GetUserId(), loginInfo.Login);
+            //if (result.Succeeded)
+            //{
+            //    return RedirectToAction("Manage");
+            //}
+            return RedirectToAction("Manage", new { Message = ManageMessageId.Error });
         }
 
         //
@@ -251,34 +277,34 @@ namespace VPN.Web.Controllers
         public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model,
             string returnUrl)
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Manage");
-            }
+            //if (User.Identity.IsAuthenticated)
+            //{
+            //    return RedirectToAction("Manage");
+            //}
 
-            if (ModelState.IsValid)
-            {
-                // 从外部登录提供程序获取有关用户的信息
-                ExternalLoginInfo info = await AuthenticationManager.GetExternalLoginInfoAsync();
-                if (info == null)
-                {
-                    return View("ExternalLoginFailure");
-                }
-                var user = new ApplicationUser {UserName = model.UserName};
-                IdentityResult result = await UserManager.CreateAsync(user);
-                if (result.Succeeded)
-                {
-                    result = await UserManager.AddLoginAsync(user.Id, info.Login);
-                    if (result.Succeeded)
-                    {
-                        await SignInAsync(user, false);
-                        return RedirectToLocal(returnUrl);
-                    }
-                }
-                AddErrors(result);
-            }
+            //if (ModelState.IsValid)
+            //{
+            //    // 从外部登录提供程序获取有关用户的信息
+            //    ExternalLoginInfo info = await AuthenticationManager.GetExternalLoginInfoAsync();
+            //    if (info == null)
+            //    {
+            //        return View("ExternalLoginFailure");
+            //    }
+            //    var user = new ApplicationUser {UserName = model.UserName};
+            //    IdentityResult result = await UserManager.CreateAsync(user);
+            //    if (result.Succeeded)
+            //    {
+            //        result = await UserManager.AddLoginAsync(user.Id, info.Login);
+            //        if (result.Succeeded)
+            //        {
+            //            await SignInAsync(user, false);
+            //            return RedirectToLocal(returnUrl);
+            //        }
+            //    }
+            //    AddErrors(result);
+            //}
 
-            ViewBag.ReturnUrl = returnUrl;
+            //ViewBag.ReturnUrl = returnUrl;
             return View(model);
         }
 
@@ -331,17 +357,13 @@ namespace VPN.Web.Controllers
 
         private const string XsrfKey = "XsrfId";
 
-        private IAuthenticationManager AuthenticationManager
-        {
-            get { return HttpContext.GetOwinContext().Authentication; }
-        }
 
-        private async Task SignInAsync(ApplicationUser user, bool isPersistent)
+
+        private void SignInAsync(User user, bool isPersistent)
         {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-            ClaimsIdentity identity =
-                await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-            AuthenticationManager.SignIn(new AuthenticationProperties {IsPersistent = isPersistent}, identity);
+            ClaimsIdentity identity = userService.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
         }
 
         private void AddErrors(IdentityResult result)
@@ -373,7 +395,8 @@ namespace VPN.Web.Controllers
 
         private class ChallengeResult : HttpUnauthorizedResult
         {
-            public ChallengeResult(string provider, string redirectUri) : this(provider, redirectUri, null)
+            public ChallengeResult(string provider, string redirectUri)
+                : this(provider, redirectUri, null)
             {
             }
 
@@ -390,7 +413,7 @@ namespace VPN.Web.Controllers
 
             public override void ExecuteResult(ControllerContext context)
             {
-                var properties = new AuthenticationProperties {RedirectUri = RedirectUri};
+                var properties = new AuthenticationProperties { RedirectUri = RedirectUri };
                 if (UserId != null)
                 {
                     properties.Dictionary[XsrfKey] = UserId;

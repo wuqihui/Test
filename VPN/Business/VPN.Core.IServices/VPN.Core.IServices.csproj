@@ -39,8 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IBaseService.cs" />
+    <Compile Include="IServiceBase.cs" />
     <Compile Include="IUserService.cs" />
+    <Compile Include="IVpnService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
