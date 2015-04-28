@@ -235,6 +235,7 @@
     <Content Include="Views\VPN\Edit.cshtml" />
     <Content Include="Views\VPN\Index.cshtml" />
     <Content Include="Views\VPN\Buy.cshtml" />
+    <Content Include="Views\Account\MyOrders.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

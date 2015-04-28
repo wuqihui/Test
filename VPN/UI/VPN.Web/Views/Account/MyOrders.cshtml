@@ -1,0 +1,32 @@
+﻿@model IEnumerable<VPN.Core.Entities.Order>
+
+@{
+    ViewBag.Title = "我购买的VPN";
+}
+<h2>已购买的VPN</h2>
+<table class="table">
+    <tr>
+        <th>
+            速度
+        </th>
+        <th>
+            Ip地址
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vpn.Speed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vpn.IpAddress)
+            </td>
+            <td>
+                @Html.ActionLink("详情", "Details","Vpn", new { id = item.Vpn.Id },new {})
+            </td>
+        </tr>
+    } 
+</table>

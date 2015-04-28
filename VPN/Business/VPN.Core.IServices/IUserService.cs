@@ -8,7 +8,6 @@ namespace VPN.Core.IServices
     public interface IUserService : IServiceBase<User,int>
     {
         ClaimsIdentity CreateIdentity(User user, string authenticationType);
-        int SaveOrders(Order order);
 
     }
 }

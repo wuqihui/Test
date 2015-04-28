@@ -16,10 +16,5 @@ namespace VPN.Core.Repositories
         {
             return CurrentSession.Query<User>().FirstOrDefault(x => x.UserName.Equals(userName));
         }
-
-        public int SaveOrders(Order order)
-        {
-          return  (int)CurrentSession.Save(order);
-        }
     }
 }

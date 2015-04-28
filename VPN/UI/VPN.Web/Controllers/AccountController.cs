@@ -16,7 +16,7 @@ namespace VPN.Web.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private IUserService userService;
+        private readonly IUserService userService;
         private IAuthenticationManager AuthenticationManager { get { return HttpContext.GetOwinContext().Authentication; } }
         public AccountController()
         {
@@ -53,8 +53,8 @@ namespace VPN.Web.Controllers
             if (ModelState.IsValid)
             {
                 // ApplicationUser user = await UserManager.FindAsync(model.UserName, model.Password);
-                var userService = Ioc.Resolve<IUserService>();
-                var user = userService.Find(x => x.UserName == loginViewModel.UserName && x.Password == loginViewModel.Password);
+                var service = Ioc.Resolve<IUserService>();
+                var user = service.Find(x => x.UserName == loginViewModel.UserName && x.Password == loginViewModel.Password);
                 if (user != null)
                 {
                     // await SignInAsync(user, model.RememberMe);
@@ -201,6 +201,12 @@ namespace VPN.Web.Controllers
 
             // 如果我们进行到这一步时某个地方出错，则重新显示表单
             return View(model);
+        }
+
+        public ActionResult MyOrders()
+        {
+            var myOrders = Ioc.Resolve<IOrderService>().FindList(order => order.User.Id == int.Parse(User.Identity.GetUserId()));
+            return View(myOrders);
         }
 
         //

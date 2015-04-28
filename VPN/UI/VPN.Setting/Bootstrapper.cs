@@ -42,6 +42,13 @@ namespace VPN.Setting
                 .ImplementedBy<VpnRepository>()
                 .LifeStyle.PerWebRequest
                 );
+
+            //订单信息数据仓库
+            container.Register(
+               Component.For<IOrderRepostitory>()
+               .ImplementedBy<OrderRepository>()
+               .LifeStyle.PerWebRequest
+               );
         }
 
         /// <summary>
@@ -62,6 +69,11 @@ namespace VPN.Setting
                 .ImplementedBy<VpnService>()
                 .LifeStyle.PerWebRequest
                 );
+            container.Register(
+               Component.For<IOrderService>()
+               .ImplementedBy<OrderService>()
+               .LifeStyle.PerWebRequest
+               );
         }
     }
 }

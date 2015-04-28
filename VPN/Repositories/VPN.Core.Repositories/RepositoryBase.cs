@@ -40,17 +40,13 @@ namespace VPN.Core.Repositories
             } 
         }
 
-        public int Insert(System.Collections.Generic.IEnumerable<TEntity> entities)
-        {
-            throw new NotImplementedException();
-        }
-
         public bool Update(TEntity entity)
         {
             using (ITransaction transaction = CurrentSession.BeginTransaction())
             {
                 try
                 {
+                    entity = CurrentSession.Merge(entity);
                     CurrentSession.Update(entity);
                     CurrentSession.Flush();
                     transaction.Commit();

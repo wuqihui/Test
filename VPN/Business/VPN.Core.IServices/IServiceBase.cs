@@ -54,7 +54,7 @@ namespace VPN.Core.IServices
         /// <param name="orderName">排序名称</param>
         /// <param name="isAsc">是否升序</param>
         /// <returns></returns>
-        IQueryable<TEntity> FindList(Expression<Func<TEntity, bool>> whereLamdba, string orderName, bool isAsc);
+        IQueryable<TEntity> FindList(Expression<Func<TEntity, bool>> whereLamdba, string orderName = "CreateTime", bool isAsc=false);
 
     }
 }

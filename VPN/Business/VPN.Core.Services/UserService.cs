@@ -25,9 +25,9 @@ namespace VPN.Core.Services
             return _identity;
         }
 
-        public int SaveOrders(Order order)
-        {
-            return ((IUserRepository) CurrentRepository).SaveOrders(order);
-        }
+        //public int SaveOrders(Order order)
+        //{
+        //    return ((IUserRepository) CurrentRepository).SaveOrders(order);
+        //}
     }
 }

@@ -16,13 +16,6 @@ namespace VPN.Core.IRepositories
         TKey Insert(TEntity entity);
 
         /// <summary>
-        /// 批量插入实体
-        /// </summary>
-        /// <param name="entities">实体对象集合</param>
-        /// <returns>操作影响的行数</returns>
-        int Insert(IEnumerable<TEntity> entities);
-
-        /// <summary>
         /// 更新实体对象
         /// </summary>
         /// <param name="entity">更新后的实体对象</param>
@@ -86,7 +79,8 @@ namespace VPN.Core.IRepositories
         /// <param name="orderName">排序名称</param>
         /// <param name="isAsc">是否升序</param>
         /// <returns></returns>
-        IQueryable<TEntity> FindList(Expression<Func<TEntity, bool>> whereLamdba, string orderName, bool isAsc);
+        IQueryable<TEntity> FindList(Expression<Func<TEntity, bool>> whereLamdba, string orderName = "CreateTime", bool isAsc = false);
+
 
         /// <summary>
         ///     查找分页数据列表

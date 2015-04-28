@@ -10,6 +10,5 @@ namespace VPN.Core.Entities
     {
         public virtual User User{ get; set; }
         public virtual VpnInfo Vpn { get; set; }
-            
     }
 }
